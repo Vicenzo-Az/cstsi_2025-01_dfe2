@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import itemsData from '../data/items.json';
+import itemsData from '../../data/items.json';
 
 export default function ItemsList() {
   const [items] = useState(itemsData);

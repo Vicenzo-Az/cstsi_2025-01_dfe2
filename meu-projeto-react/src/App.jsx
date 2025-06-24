@@ -1,24 +1,48 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import ItemsList from './pages/ItemsList';
-import ItemDetail from './pages/ItemDetail';
-import Profile from './pages/Profile';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/layout/ProtectedRoute';
+import Header from './components/layout/Header';
+import Sidebar from './components/layout/Sidebar';
+import DashboardPage from './pages/DashboardPage';
+import DataSourcesPage from './pages/DataSourcesPage';
+import LoginPage from './pages/LoginPage';
+import AdminPage from './pages/AdminPage';
+import './App.css';
 
-export default function App() {
+function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
-        <Route path="items" element={<ItemsList />} />
-        <Route path="items/:id" element={<ItemDetail />} />
-        <Route path="profile" element={<Profile />} />
-      </Route>
-    </Routes>
+    <AuthProvider>
+      <Router>
+        <div className="d-flex">
+          <Sidebar />
+          <div className="flex-grow-1">
+            <Header />
+            <main className="p-4">
+              <Routes>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/" element={
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/data-sources" element={
+                  <ProtectedRoute>
+                    <DataSourcesPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin" element={
+                  <ProtectedRoute adminOnly>
+                    <AdminPage />
+                  </ProtectedRoute>
+                } />
+              </Routes>
+            </main>
+          </div>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
+
+export default App;

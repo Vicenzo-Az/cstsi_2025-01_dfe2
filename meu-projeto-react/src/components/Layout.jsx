@@ -1,19 +1,18 @@
 import React from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+import Header from './Header';   // Sem chaves
+import Sidebar from './Sidebar'; // Sem chaves
 
 export default function Layout() {
   return (
-    <div>
-      <nav className="app-nav">
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/items">Items</NavLink>
-        <NavLink to="/profile">Profile</NavLink>
-        <NavLink to="/login">Login</NavLink>
-        <NavLink to="/register">Register</NavLink>
-      </nav>
-      <main>
-        <Outlet />
-      </main>
+    <div className="d-flex">
+      <Sidebar />
+      <div className="flex-grow-1 d-flex flex-column min-vh-100">
+        <Header />
+        <main className="flex-grow-1 p-4 bg-light">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }

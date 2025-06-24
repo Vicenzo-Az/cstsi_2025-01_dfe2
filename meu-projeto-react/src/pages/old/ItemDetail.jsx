@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import itemsData from '../data/items.json';
+import itemsData from '../../data/items.json';
 
 export default function ItemDetail() {
   const { id } = useParams();
