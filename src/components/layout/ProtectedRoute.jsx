@@ -1,16 +1,17 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-const ProtectedRoute = ({ children, adminOnly = false }) => {
+export default function ProtectedRoute({ children, adminOnly = false }) {
   const { user, isLoading } = useAuth();
+  const location = useLocation();
 
   if (isLoading) {
-    return <div>Carregando...</div>;
+    return <div className="d-flex justify-content-center mt-5"><Spinner /></div>;
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   if (adminOnly && user.role !== 'admin') {
@@ -18,6 +19,4 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
   }
 
   return children;
-};
-
-export default ProtectedRoute;
+}

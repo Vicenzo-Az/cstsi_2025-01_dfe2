@@ -2,7 +2,7 @@ import { rest } from 'msw';
 
 export const handlers = [
   // Mock para login
-  rest.post('http://localhost:8000/api/auth/login/', (req, res, ctx) => {
+  rest.post('http://localhost:8000/api/v1/auth/login/', (req, res, ctx) => {
     return res(
       ctx.json({
         token: 'mock-jwt-token',
@@ -12,7 +12,7 @@ export const handlers = [
   }),
 
   // Mock para fontes de dados
-  rest.get('http://localhost:8000/api/data-sources/', (req, res, ctx) => {
+  rest.get('http://localhost:8000/api/v1/data-sources/', (req, res, ctx) => {
     return res(
       ctx.json([
         { id: 1, name: 'Sales Data', type: 'CSV', created_at: '2025-01-15' },
