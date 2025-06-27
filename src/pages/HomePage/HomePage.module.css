@@ -1,0 +1,130 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.authLinks {
+  display: flex;
+  gap: 20px;
+}
+
+.loginLink, .signupLink {
+  padding: 8px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.loginLink {
+  color: #3498db;
+  border: 1px solid #3498db;
+}
+
+.loginLink:hover {
+  background-color: #3498db;
+  color: white;
+}
+
+.signupLink {
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  color: white;
+}
+
+.signupLink:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(37, 117, 252, 0.3);
+}
+
+.hero {
+  text-align: center;
+  padding: 60px 20px 40px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+}
+
+.heroTitle {
+  font-size: 3rem;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.heroSubtitle {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.imageContainer {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainImage {
+  max-width: 100%;
+  max-height: 600px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  font-size: 0.9rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .topBar {
+    padding: 15px 20px;
+  }
+  
+  .heroTitle {
+    font-size: 2.2rem;
+  }
+  
+  .authLinks {
+    gap: 10px;
+  }
+  
+  .loginLink, .signupLink {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .topBar {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .heroTitle {
+    font-size: 1.8rem;
+  }
+}
