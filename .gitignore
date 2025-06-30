@@ -5,7 +5,7 @@ node_modules/
 dist/
 
 # Local environment variables
-.env.local
+.env
 
 # Log files
 *.log
