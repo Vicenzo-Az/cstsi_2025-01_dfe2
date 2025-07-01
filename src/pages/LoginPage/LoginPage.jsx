@@ -1,38 +1,29 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import styles from './LoginPage.module.css';
 
-const LoginPage = () => {
-  const [email, setEmail] = useState('');
+export default function LoginPage() {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
-
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+      const { data } = await api.post('token/', {
+        username,
+        password,
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        login(data.token, data.user);
-        navigate('/dashboard');
-      } else {
-        setError(data.message || 'Erro ao fazer login');
-      }
+      login(data.access, data.user);
+      navigate('dashboard/');
     } catch (err) {
-      setError('Erro de conexão com o servidor');
+      console.error(err);
+      setError(err.response?.data?.detail || 'Erro de autenticação');
     }
   };
 
@@ -41,14 +32,13 @@ const LoginPage = () => {
       <div className={styles.loginCard}>
         <h2 className={styles.title}>Login</h2>
         {error && <p className={styles.error}>{error}</p>}
-        <form onSubmit={handleSubmit} className={styles.form}>
+        <form onSubmit={handleLogin} className={styles.form}>
           <div className={styles.inputGroup}>
-            <label htmlFor="email">Email</label>
+            <label>Usuário</label>
             <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </div>
@@ -70,6 +60,4 @@ const LoginPage = () => {
       </div>
     </div>
   );
-};
-
-export default LoginPage;
+}
