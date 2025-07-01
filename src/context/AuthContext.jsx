@@ -1,64 +1,53 @@
+// src/context/AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import api from '../services/api';  // cliente Axios configurado com import.meta.env.VITE_API_URL
 
-// Criar o contexto
 const AuthContext = createContext(null);
 
-// Provedor de autenticação
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Verificar autenticação ao carregar
+  // Verifica se o usuário já está autenticado ao montar o provider
   useEffect(() => {
     const checkAuth = async () => {
-      const token = localStorage.getItem('token');
-      
+      const token = localStorage.getItem('access_token');
       if (token) {
         try {
-          const response = await fetch('http://localhost:3001/auth/me', {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          });
-          
-          if (response.ok) {
-            const userData = await response.json();
-            setUser(userData);
-          } else {
-            logout();
-          }
-        } catch (error) {
-          console.error('Erro ao verificar autenticação:', error);
+          // `api` já injeta o header Authorization automaticamente via interceptor
+          const { data: userData } = await api.get('/auth/me/');  
+          setUser(userData);
+        } catch (err) {
+          console.error('Erro ao verificar autenticação:', err);
           logout();
         }
       }
       setIsLoading(false);
     };
-
     checkAuth();
   }, []);
 
-  // Função de login
-  const login = (token, userData) => {
-    localStorage.setItem('token', token);
+  // Faz login: salva token e dados do usuário
+  const login = (accessToken, userData) => {
+    localStorage.setItem('access_token', accessToken);
     setUser(userData);
   };
 
-  // Função de logout
+  // Faz logout: limpa token e usuário
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('access_token');
     setUser(null);
   };
 
-  // Valores do contexto
   const value = {
     user,
     isLoading,
-    isAuthenticated: !!user,
+    isAuthenticated: Boolean(user),
     login,
-    logout
+    logout,
   };
 
+  // Só renderiza os filhos depois de verificar o loading
   return (
     <AuthContext.Provider value={value}>
       {!isLoading && children}
@@ -66,10 +55,10 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Hook personalizado para usar o contexto
+// Hook personalizado para consumir o contexto de autenticação
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useAuth deve ser usado dentro de um AuthProvider');
   }
   return context;
