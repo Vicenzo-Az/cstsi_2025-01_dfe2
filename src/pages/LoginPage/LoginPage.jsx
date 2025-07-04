@@ -15,12 +15,15 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
     try {
+      console.log('Enviando login para', import.meta.env.VITE_API_BASE_URL + 'token/');
       const { data } = await api.post('token/', {
         username,
         password,
       });
+      console.log('Resposta do login:', data);
       login(data.access, data.user);
-      navigate('dashboard/');
+      console.log('Navegando para /dashboards');
+      navigate('/dashboard');
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.detail || 'Erro de autenticação');
