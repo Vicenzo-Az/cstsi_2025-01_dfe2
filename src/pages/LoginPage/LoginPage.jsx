@@ -11,22 +11,15 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     try {
-      console.log('Enviando login para', import.meta.env.VITE_API_BASE_URL + 'token/');
-      const { data } = await api.post('token/', {
-        username,
-        password,
-      });
-      console.log('Resposta do login:', data);
-      login(data.access, data.user);
-      console.log('Navegando para /dashboards');
+      const { data } = await api.post('/token/', { username, password });
+      await login(data.access);
       navigate('/dashboard', { replace: true });
     } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.detail || 'Erro de autenticação');
+      console.error('Falha no login:', err);
+      // mostre mensagem de erro ao usuário
     }
   };
 
@@ -35,7 +28,7 @@ export default function LoginPage() {
       <div className={styles.loginCard}>
         <h2 className={styles.title}>Login</h2>
         {error && <p className={styles.error}>{error}</p>}
-        <form onSubmit={handleLogin} className={styles.form}>
+        <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
             <label>Usuário</label>
             <input

@@ -1,65 +1,89 @@
 // src/context/AuthContext.jsx
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import api from '../services/api';  // cliente Axios configurado com import.meta.env.VITE_API_URL
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import api from '../services/api';
 
-const AuthContext = createContext(null);
+const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Verifica se o usuário já está autenticado ao montar o provider
+  // Ao montar, tenta recuperar e validar o token existente
   useEffect(() => {
-    const checkAuth = async () => {
+    const initializeAuth = async () => {
       const token = localStorage.getItem('access_token');
       if (token) {
         try {
-          // `api` já injeta o header Authorization automaticamente via interceptor
-          const { data: userData } = await api.get('/auth/me/');  
-          setUser(userData);
+          // Define header para todas as requisições
+          api.defaults.headers.common.Authorization = `Bearer ${token}`;
+          // Busca dados do usuário autenticado
+          const { data } = await api.get('/auth/user/');
+          setUser(data);
         } catch (err) {
-          console.error('Erro ao verificar autenticação:', err);
-          logout();
+          console.error('Erro ao validar token existente:', err);
+          localStorage.removeItem('access_token');
+          setUser(null);
         }
       }
       setIsLoading(false);
     };
-    checkAuth();
+
+    initializeAuth();
   }, []);
 
-  // Faz login: salva token e dados do usuário
-  const login = (accessToken, userData) => {
-    localStorage.setItem('access_token', accessToken);
-    setUser(userData);
+  // Realiza o login: armazena token, busca user e atualiza estado
+  const login = async (token) => {
+    try {
+      // 1) Armazena token e ajusta header
+      localStorage.setItem('access_token', token);
+      api.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+      // 2) Busca dados do usuário
+      const { data } = await api.get('/auth/user/');
+      setUser(data);
+    } catch (err) {
+      console.error('Erro no login ao buscar usuário:', err);
+      // Caso falhe, limpa tudo
+      localStorage.removeItem('access_token');
+      setUser(null);
+      throw err; // permite tratar o erro na página de login, se desejar
+    }
   };
 
-  // Faz logout: limpa token e usuário
+  // Desloga: limpa token, header e usuário
   const logout = () => {
     localStorage.removeItem('access_token');
+    delete api.defaults.headers.common.Authorization;
     setUser(null);
   };
 
   const value = {
     user,
-    isLoading,
     isAuthenticated: Boolean(user),
+    isLoading,
     login,
     logout,
   };
 
-  // Só renderiza os filhos depois de verificar o loading
   return (
     <AuthContext.Provider value={value}>
-      {!isLoading && children}
+      {isLoading
+        ? <div>Carregando autenticação...</div>
+        : children
+      }
     </AuthContext.Provider>
   );
 };
 
-// Hook personalizado para consumir o contexto de autenticação
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAuth deve ser usado dentro de um AuthProvider');
   }
   return context;
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
