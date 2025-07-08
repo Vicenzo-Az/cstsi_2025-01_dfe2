@@ -23,7 +23,7 @@ export default function LoginPage() {
       console.log('Resposta do login:', data);
       login(data.access, data.user);
       console.log('Navegando para /dashboards');
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.detail || 'Erro de autenticação');
