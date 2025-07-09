@@ -23,7 +23,7 @@
 
 ## Visão Geral
 
-Este projeto é a aplicação Front-End desenvolvida na disciplina **Desenvolvimento Front-End II** (4º semestre do CSTSI), ministrada pela Prof.ª Gill Velleda Gonzales. Trata-se de uma SPA em **React** (via **Vite**), que consome uma API REST para demonstrar funcionalidades de autenticação, navegação protegida, exibição de dashboards com gráficos e operações de CRUD.
+Este projeto é a aplicação Front-End desenvolvida na disciplina **Desenvolvimento Front-End II** (4º semestre do CSTSI), ministrada pela Prof. Gill Velleda Gonzales. Trata-se de uma SPA em **React** (via **Vite**), que consome uma API REST para demonstrar funcionalidades de autenticação, navegação protegida, exibição de dashboards com gráficos e operações de CRUD.
 
 ---
 
