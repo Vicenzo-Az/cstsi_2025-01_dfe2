@@ -222,3 +222,10 @@ npm test
 ```
 
 O ambiente de testes usa **jsdom** e o setup em `setupTests.js`.
+
+- provider para cada serviço
+- CRUD para:
+  - dashboard
+  - datasorces
+  - manter usuario foto perfil
+- sass less tailwind
