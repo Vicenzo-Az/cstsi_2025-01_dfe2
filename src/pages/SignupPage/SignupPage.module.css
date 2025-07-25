@@ -1,105 +1,74 @@
-.signupContainer {
+/* src/pages/SignupPage/SignupPage.module.css */
+.container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-  padding: 20px;
+  height: 100vh;
+  background: #f5f7fa;
 }
 
-.signupCard {
+.card {
   background: white;
-  border-radius: 10px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
   width: 100%;
   max-width: 400px;
-  padding: 40px;
   text-align: center;
 }
 
-.title {
+.card h2 {
+  margin-bottom: 1rem;
   color: #333;
-  margin-bottom: 30px;
-  font-size: 28px;
+}
+
+.error {
+  background: #ffe5e5;
+  color: #b00020;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1rem;
 }
 
-.inputGroup {
+label {
   text-align: left;
-}
-
-.inputGroup label {
-  display: block;
-  margin-bottom: 8px;
   font-weight: 600;
   color: #555;
 }
 
-.inputGroup input {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
-  transition: border-color 0.3s;
+input {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-.inputGroup input:focus {
-  border-color: #2575fc;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(37, 117, 252, 0.2);
-}
-
-.submitButton {
+button {
+  padding: 0.75rem;
   background: linear-gradient(to right, #6a11cb, #2575fc);
   color: white;
   border: none;
-  padding: 12px;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 4px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: background 0.2s;
 }
 
-.submitButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 7px 14px rgba(37, 117, 252, 0.3);
+button:hover {
+  background: linear-gradient(to right, #5b0fb8, #206dcf);
 }
 
-.footer {
-  margin-top: 20px;
-  color: #666;
-  font-size: 14px;
+.footerText {
+  margin-top: 1rem;
+  font-size: 0.9rem;
 }
 
-.footer a {
+.footerText a {
   color: #2575fc;
   text-decoration: none;
-  font-weight: 600;
-}
-
-.footer a:hover {
-  text-decoration: underline;
-}
-
-.error {
-  color: #e74c3c;
-  background: #fdeded;
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  font-size: 14px;
-}
-
-/* Responsividade */
-@media (max-width: 480px) {
-  .signupCard {
-    padding: 30px 20px;
-  }
 }
