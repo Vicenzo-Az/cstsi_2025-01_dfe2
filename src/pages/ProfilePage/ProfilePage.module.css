@@ -1,0 +1,39 @@
+/* postcss */
+
+.container {
+  @apply max-w-md mx-auto p-6 bg-gray-50 rounded-lg shadow-sm;
+}
+
+/* Mensagem de erro */
+.error {
+  @apply text-red-600 mb-4;
+}
+
+/* Formulário de edição */
+.form {
+  @apply flex flex-col gap-4;
+}
+
+/* Preview da imagem */
+.preview {
+  @apply mt-4 flex justify-center;
+}
+
+.preview img {
+  @apply w-32 h-32 rounded-full object-cover;
+}
+
+/* Botão de salvar */
+.form button {
+  @apply mt-2 px-4 py-2 rounded-md text-white bg-green-600 hover:bg-green-700;
+}
+
+/* Inputs e labels */
+.form label {
+  @apply block text-sm font-medium text-gray-700;
+}
+
+.form input[type="text"],
+.form input[type="file"] {
+  @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500;
+}

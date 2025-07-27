@@ -1,6 +1,5 @@
-/* src/pages/DashboardPage/DashboardPage.module.css */
+/* postcss */
 
-/* Container geral com fundo claro e colunas */
 .container {
   display: flex;
   flex-direction: column;

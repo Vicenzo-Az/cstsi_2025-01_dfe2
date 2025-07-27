@@ -1,0 +1,39 @@
+/* postcss */
+
+.container {
+  @apply max-w-4xl mx-auto p-6 bg-gray-50 rounded-lg shadow-sm;
+}
+
+/* Mensagem de erro */
+.error {
+  @apply text-red-600 mb-4;
+}
+
+/* Formulário de criação/edição */
+.form {
+  @apply flex flex-col gap-4 mb-6;
+}
+
+/* Botões dentro do formulário */
+.buttons {
+  @apply flex items-center gap-2;
+}
+
+.buttons button {
+  @apply px-4 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700;
+}
+
+/* Lista de fontes */
+.list {
+  @apply divide-y divide-gray-200;
+}
+
+/* Item da lista */
+.item {
+  @apply flex justify-between items-center py-4;
+}
+
+/* Ações de editar/excluir */
+.actions button {
+  @apply p-1 rounded-full text-gray-600 hover:text-gray-800 hover:bg-gray-200;
+}

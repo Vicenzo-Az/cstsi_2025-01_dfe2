@@ -1,61 +1,83 @@
-// src/components/layout/Sidebar.jsx
 import React from 'react';
-import { Nav } from 'react-bootstrap';
-import { 
-  House, Database, People, Gear 
-} from 'react-bootstrap-icons';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import {
+  HomeIcon,
+  ChartBarIcon,
+  CircleStackIcon,
+  DocumentTextIcon,
+  UsersIcon,
+  Cog6ToothIcon,
+} from '@heroicons/react/24/outline';
+import { cn } from '../../utils/cn';
 
-// Adicione export default aqui
-export default function Sidebar() {
+const Sidebar = () => {
   const { user } = useAuth();
 
+  const navigation = [
+    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
+    { name: 'Fontes de Dados', href: '/data-sources', icon: CircleStackIcon },
+    { name: 'Dashboards', href: '/dashboards', icon: ChartBarIcon },
+    { name: 'Relatórios', href: '/reports', icon: DocumentTextIcon },
+  ];
+
+  const adminNavigation = [
+    { name: 'Usuários', href: '/admin/users', icon: UsersIcon },
+    { name: 'Configurações', href: '/admin/settings', icon: Cog6ToothIcon },
+  ];
+
   return (
-    <nav className="bg-light border-end vh-100" style={{ width: '250px' }}>
-      <div className="p-3 border-bottom">
-        <h5 className="m-0">Menu</h5>
-      </div>
-      
-      <Nav variant="pills" className="flex-column p-3">
-        <Nav.Item>
-          <NavLink 
-            to="/" 
-            className={({isActive}) => 
-              `nav-link ${isActive ? 'active' : ''} d-flex align-items-center`
-            }
-          >
-            <House className="me-2" />
-            Dashboard
-          </NavLink>
-        </Nav.Item>
-        
-        <Nav.Item>
-          <NavLink 
-            to="/data-sources" 
-            className={({isActive}) => 
-              `nav-link ${isActive ? 'active' : ''} d-flex align-items-center`
-            }
-          >
-            <Database className="me-2" />
-            Fontes de Dados
-          </NavLink>
-        </Nav.Item>
-        
-        {user?.role === 'admin' && (
-          <Nav.Item>
-            <NavLink 
-              to="/admin" 
-              className={({isActive}) => 
-                `nav-link ${isActive ? 'active' : ''} d-flex align-items-center`
+    <div className="w-64 bg-white shadow-sm border-r border-gray-200 min-h-screen">
+      <div className="p-4">
+        <nav className="space-y-2">
+          {navigation.map((item) => (
+            <NavLink
+              key={item.name}
+              to={item.href}
+              className={({ isActive }) =>
+                cn(
+                  'flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors',
+                  isActive
+                    ? 'bg-primary-50 text-primary-700 border-r-2 border-primary-600'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                )
               }
             >
-              <People className="me-2" />
-              Usuários
+              <item.icon className="w-5 h-5 mr-3" />
+              {item.name}
             </NavLink>
-          </Nav.Item>
-        )}
-      </Nav>
-    </nav>
+          ))}
+
+          {user?.role === 'admin' && (
+            <>
+              <div className="pt-4 mt-4 border-t border-gray-200">
+                <p className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Administração
+                </p>
+              </div>
+              {adminNavigation.map((item) => (
+                <NavLink
+                  key={item.name}
+                  to={item.href}
+                  className={({ isActive }) =>
+                    cn(
+                      'flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors',
+                      isActive
+                        ? 'bg-primary-50 text-primary-700 border-r-2 border-primary-600'
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    )
+                  }
+                >
+                  <item.icon className="w-5 h-5 mr-3" />
+                  {item.name}
+                </NavLink>
+              ))}
+            </>
+          )}
+        </nav>
+      </div>
+    </div>
   );
-}
+};
+
+export default Sidebar;
