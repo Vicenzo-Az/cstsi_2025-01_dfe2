@@ -1,231 +1,251 @@
-# Desenvolvimento Front-End II
+# CoffeeBase Analytics - Plataforma de Análise de Dados
 
-## Índice
+Uma plataforma moderna para PMEs analisarem dados de vendas e gerarem insights poderosos.
 
-- [Visão Geral](#visão-geral)
-- [Funcionalidades](#funcionalidades)
-- [Tecnologias](#tecnologias)
-- [Requisitos](#requisitos)
-- [Instalação](#instalação)
-- [Configuração de Variáveis de Ambiente](#configuração-de-variáveis-de-ambiente)
-- [Scripts Disponíveis](#scripts-disponíveis)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Rotas e Navegação](#rotas-e-navegação)
-- [Contexto de Autenticação](#contexto-de-autenticação)
-- [Componentes Principais](#componentes-principais)
-- [Páginas](#páginas)
-- [Serviços (API)](#serviços-api)
-- [Estilização](#estilização)
-- [Mock de API (MSW)](#mock-de-api-msw)
-- [Factories e Testes](#factories-e-testes)
+## 🚀 Tecnologias
 
----
+- **React 19** - Biblioteca JavaScript para interfaces
+- **Vite** - Build tool rápido e otimizado
+- **Tailwind CSS** - Framework CSS utilitário
+- **React Router** - Roteamento do lado cliente
+- **Axios** - Cliente HTTP para APIs
+- **Lucide React** - Ícones modernos
+- **Chart.js** - Gráficos e visualizações
 
-## Visão Geral
+## 📦 Instalação
 
-Este projeto é a aplicação Front-End desenvolvida na disciplina **Desenvolvimento Front-End II** (4º semestre do CSTSI), ministrada pela Prof. Gill Velleda Gonzales. Trata-se de uma SPA em **React** (via **Vite**), que consome uma API REST para demonstrar funcionalidades de autenticação, navegação protegida, exibição de dashboards com gráficos e operações de CRUD.
-
----
-
-## Funcionalidades
-
-- Autenticação de usuários (login e cadastro) com fluxo protegido de rotas.
-- Dashboard de visualização de dados usando **Chart.js** (via **react-chartjs-2**).
-- Consumo de API REST com **axios**.
-- Mock de API em desenvolvimento com **MSW**.
-- Componentização com React Hooks e Context API.
-- Testes unitários e de integração com **Vitest** e **jsdom**.
-- Linter configurado com **ESLint**.
-
----
-
-## Tecnologias
-
-- **JavaScript** (ES6+)
-- **React 19**
-- **Vite**
-- **React Router DOM** v7
-- **Axios**
-- **React Bootstrap** & **Bootstrap Icons**
-- **React Icons**
-- **Chart.js** & **react-chartjs-2**
-- **MSW** & **@mswjs/data**
-- **Vitest**
-- **ESLint**
-
----
-
-## Requisitos
-
-- Node.js >= 18
-- npm >= 8
-
----
-
-## Instalação
-
-1. Clone o repositório:
-
-   ```bash
-   git clone https://github.com/Vicenzo-Az/cstsi_2025-01_dfe2.git
-   cd cstsi_2025-01_dfe2
-   ```
-
-2. Instale dependências:
-
-   ```bash
-   npm install
-   ```
-
-3. Configure variáveis de ambiente (veja próxima seção).
-4. Inicie o servidor de desenvolvimento:
-
-   ```bash
-   npm run dev
-   ```
-
-5. Abra `http://localhost:3000` no navegador.
-
----
-
-## Configuração de Variáveis de Ambiente
-
-Crie um arquivo `.env` na raiz com (exemplo):
-
-```env
-VITE_API_URL=http://localhost:8000/api/v1/
-```
-
-- `VITE_API_URL`: URL base da API que será consumida.
-
----
-
-## Scripts Disponíveis
-
-| **Comando**        | **Descrição**                             |
-| ------------------ | ----------------------------------------- |
-| `npm run dev`      | Inicia o servidor Vite (desenvolvimento). |
-| `npm run build`    | Gera bundle otimizado para produção.      |
-| `npm run preview`  | Serve o build de produção localmente.     |
-| `npm test`         | Executa testes com Vitest.                |
-| `npm run coverage` | Gera relatório de cobertura.              |
-
----
-
-## Estrutura do Projeto
-
-```text
-├── public/                # Arquivos estáticos (index.html, favicon, assets)
-├── src/                   # Código-fonte
-│   ├── api/               # Configuração de axios e endpoints
-│   ├── components/        # Componentes genéricos (e.g. ProtectedRoute)
-│   ├── context/           # Context API (AuthContext)
-│   ├── pages/             # Páginas da aplicação
-│   │   ├── HomePage/
-│   │   ├── LoginPage/
-│   │   ├── SignupPage/
-│   │   └── DashboardPage/
-│   ├── setupTests.js      # Configuração Vitest/jsdom
-│   ├── App.jsx            # Componente raiz com rotas
-│   ├── main.jsx           # Ponto de entrada React
-│   └── App.css            # Estilos globais
-├── .eslintrc.js           # Configuração ESLint
-├── vite.config.js         # Configuração Vite
-├── package.json
-└── README.md              # (Este arquivo)
-```
-
----
-
-## Rotas e Navegação
-
-A aplicação utiliza **React Router DOM** para definir rotas:
-
-- `/` — **HomePage** (pública)
-- `/login` — **LoginPage** (pública)
-- `/signup` — **SignupPage** (pública)
-- `/dashboard` — **DashboardPage** (protegida)
-
-A **ProtectedRoute** envolve componentes que exigem autenticação.
-
----
-
-## Contexto de Autenticação
-
-O `AuthContext` gerencia estado de autenticação:
-
-- **login:** armazena token e dados do usuário no `localStorage`.
-- **logout:** limpa contexto e `localStorage`.
-- **checkAuth:** verifica token válido ao carregar a aplicação.
-
-Use o hook `useAuth()` para acessar `user`, `login`, `logout`, `token`.
-
----
-
-## Componentes Principais
-
-- **ProtectedRoute:** redireciona para `/login` se não autenticado.
-- **Navbar:** barra superior com links de navegação.
-- **Chart:** wrapper para gráficos em **DashboardPage**.
-
----
-
-## Páginas
-
-- **HomePage:** landing page com informações gerais.
-- **LoginPage:** formulário de login.
-- **SignupPage:** formulário de registro.
-- **DashboardPage:** mostra gráficos e estatísticas consumindo API.
-
----
-
-## Serviços (API)
-
-Em `src/api/axios.js`, instância do **axios** configurada com `baseURL` e interceptors para anexar token JWT.
-
-Endpoints principais:
-
-- `POST /auth/login/` — autenticação (retorna token).
-- `POST /auth/signup/` — cadastro de usuário.
-- `GET /dashboard/data/` — dados para gráficos.
-
----
-
-## Estilização
-
-- **CSS Modules** em cada componente/página (e.g. `HomePage.module.css`).
-- Estilos globais em `App.css`.
-- **React Bootstrap** para componentes prontos.
-
----
-
-## Mock de API (MSW)
-
-Durante o desenvolvimento, **MSW** intercepta chamadas e retorna dados fictícios:
-
-- Handlers definidos em `src/mocks/handlers.js`.
-- Data layer com `@mswjs/data` para gerar dados dinâmicos.
-- Inicia **MSW** em `src/setupTests.js` (apenas em desenvolvimento).
-
----
-
-## Factories e Testes
-
-As factories usam **@mswjs/data** para criar instâncias de dados no mock:
-
-- Localizadas em `src/mocks/server.js` e `src/mocks/data.js`.
-
-Para rodar testes:
+1. **Clone o repositório**
 
 ```bash
-npm test
+git clone <url-do-repositorio>
+cd plataforma-analise-dados
 ```
 
-O ambiente de testes usa **jsdom** e o setup em `setupTests.js`.
+2. **Instale as dependências**
+
+```bash
+npm install
+```
+
+3. **Configure as variáveis de ambiente**
+
+```bash
+cp .env.example .env
+```
+
+4. **Inicie o servidor de desenvolvimento**
+
+```bash
+npm run dev
+```
+
+A aplicação estará disponível em `http://localhost:3000`
+
+## 🏗️ Estrutura do Projeto
+
+```text
+src/
+├── components/          # Componentes reutilizáveis
+│   ├── ui/             # Componentes de interface
+│   ├── layout/         # Componentes de layout
+│   └── route-guards.jsx # Proteção de rotas
+├── pages/              # Páginas da aplicação
+│   ├── HomePage.jsx
+│   ├── LoginPage.jsx
+│   ├── SignupPage.jsx
+│   ├── DashboardPage.jsx
+│   ├── DataSourcePage.jsx
+│   └── ProfilePage.jsx
+├── context/            # Contextos React
+│   └── AuthContext.jsx
+├── services/           # Serviços e APIs
+│   └── api.js
+├── App.jsx            # Componente principal
+├── main.jsx          # Ponto de entrada
+└── main.css         # Estilos globais
+```
+
+## 🔐 Autenticação
+
+O sistema de autenticação inclui:
+
+- Login/Logout com JWT
+- Refresh token automático
+- Proteção de rotas
+- Gerenciamento de estado global
+
+### Fluxo de Autenticação
+
+1. **Login**: POST `/auth/token/` com credenciais
+2. **Token**: Armazenado no localStorage
+3. **Refresh**: Renovação automática quando expira
+4. **Logout**: Limpeza de tokens e redirecionamento
+
+## 📱 Páginas Principais
+
+### HomePage (`/home`)
+
+- Landing page pública
+- Apresentação da plataforma
+- Links para login/cadastro
+
+### LoginPage (`/login`)
+
+- Formulário de autenticação
+- Validação de credenciais
+- Redirecionamento após login
+- **Demo**: admin / 123456
+
+### SignupPage (`/signup`)
+
+- Cadastro de novos usuários
+- Validação de formulário
+- Confirmação de senha
+
+### DashboardPage (`/dashboard`)
+
+- Painel principal do usuário
+- Estatísticas e métricas
+- Atividade recente
+- Ações rápidas
+
+### DataSourcePage (`/datasources`)
+
+- Gerenciamento de fontes de dados
+- Upload de arquivos CSV/Excel
+- Conexão com APIs externas
+- Listagem e exclusão
+
+### ProfilePage (`/profile`)
+
+- Edição de perfil do usuário
+- Alteração de senha
+- Configurações da conta
+- Upload de avatar
+
+## 🎨 Sistema de Design
+
+### Componentes UI
+
+O projeto inclui um sistema completo de componentes:
+
+- **Button**: Botões com variantes e estados
+- **Card**: Containers de conteúdo
+- **Input**: Campos de formulário
+- **Alert**: Mensagens de feedback
+- **Badge**: Indicadores de status
+- **LoadingSpinner**: Indicadores de carregamento
+
+### Cores e Temas
+
+```css
+/* Cores principais */
+primary: #3b82f6 (azul)
+secondary: #64748b (cinza)
+success: #10b981 (verde)
+warning: #f59e0b (amarelo)
+error: #ef4444 (vermelho)
+```
+
+## 🛡️ Proteção de Rotas
+
+### Rotas Públicas
+
+- Acessíveis sem autenticação
+- Redirecionam para dashboard se já logado
+- Incluem: `/home`, `/login`, `/signup`
+
+### Rotas Protegidas
+
+- Exigem autenticação
+- Redirecionam para login se não autenticado
+- Incluem: `/dashboard`, `/datasources`, `/profile`
+
+## 🔧 Scripts Disponíveis
+
+```bash
+# Desenvolvimento
+npm run dev
+
+# Build de produção
+npm run build
+
+# Preview da build
+npm run preview
+
+# Testes
+npm run test
+
+# Cobertura de testes
+npm run coverage
+```
+
+## 🌐 Configuração da API
+
+Configure a URL base da API no arquivo `.env`:
+
+```env
+VITE_API_URL=http://localhost:8000/api/v1
+```
+
+### Endpoints Esperados
+
+```python
+POST /auth/token/          # Login
+POST /auth/token/refresh/  # Refresh token
+GET  /auth/me/            # Dados do usuário
+POST /auth/register/      # Registro
+GET  /datasources/        # Listar fontes
+POST /datasources/        # Criar fonte
+DELETE /datasources/{id}/ # Excluir fonte
+```
+
+## 🚨 Tratamento de Erros
+
+- **ErrorBoundary**: Captura erros React
+- **API Interceptors**: Tratamento automático de 401
+- **Form Validation**: Validação client-side
+- **User Feedback**: Alerts e mensagens
+
+## 📱 Responsividade
+
+- Design mobile-first
+- Breakpoints: sm (640px), md (768px), lg (1024px)
+- Layout adaptativo
+- Menu lateral colapsável
+
+## 🔄 Estado da Aplicação
+
+### Context API
+
+- **AuthContext**: Estado de autenticação global
+- **User Management**: Dados do usuário logado
+- **Loading States**: Estados de carregamento
+
+## 🎯 Próximos Passos
+
+### Funcionalidades Planejadas
+
+- [ ] Dashboard Builder visual
+- [ ] Gráficos interativos
+- [ ] Relatórios automáticos
+- [ ] Integração com mais APIs
+- [ ] Sistema de notificações
+- [ ] Compartilhamento de dashboards
+
+### Melhorias Técnicas
+
+- [ ] Testes unitários completos
+- [ ] PWA (Progressive Web App)
+- [ ] Internacionalização (i18n)
+- [ ] Tema escuro
+- [ ] Otimizações de performance
 
 - provider para cada serviço
+
 - CRUD para:
   - dashboard
   - datasorces
   - manter usuario foto perfil
+
 - sass less tailwind
