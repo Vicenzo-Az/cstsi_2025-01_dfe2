@@ -10,7 +10,7 @@ export function AuthProvider({ children }) {
   // Função para fazer login
   const login = async (credentials) => {
     try {
-      const response = await api.post('/auth/token/', credentials);
+      const response = await api.post('/token/', credentials);
       const { access, refresh } = response.data;
       
       // Salva tokens no localStorage
@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
       localStorage.setItem('refresh_token', refresh);
       
       // Busca dados do usuário
-      const userResponse = await api.get('/auth/me/');
+      const userResponse = await api.get('/auth/user/');
       setUser(userResponse.data);
       
       return { success: true };
@@ -41,7 +41,7 @@ export function AuthProvider({ children }) {
   // Função para registrar usuário
   const register = async (userData) => {
     try {
-      await api.post('/auth/register/', userData);
+      await api.post('/auth/signup/', userData);
       return { success: true };
     } catch (error) {
       console.error('Erro no registro:', error);
@@ -63,7 +63,7 @@ export function AuthProvider({ children }) {
       }
 
       try {
-        const response = await api.get('/auth/me/');
+        const response = await api.get('/auth/user/');
         setUser(response.data);
       } catch (error) {
         console.error('Erro ao verificar autenticação:', error);

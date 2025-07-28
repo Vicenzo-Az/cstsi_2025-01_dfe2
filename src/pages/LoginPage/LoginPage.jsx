@@ -146,16 +146,6 @@ export default function LoginPage() {
           </CardBody>
         </Card>
 
-        {/* Demo credentials info */}
-        <div className="mt-6 text-center">
-          <Card className="bg-primary-50 border-primary-200">
-            <CardBody className="py-3">
-              <p className="text-sm text-primary-700">
-                <strong>Demo:</strong> Use "admin" / "123456" para testar
-              </p>
-            </CardBody>
-          </Card>
-        </div>
       </div>
     </div>
   );

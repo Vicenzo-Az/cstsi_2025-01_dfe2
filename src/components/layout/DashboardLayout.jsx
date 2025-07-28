@@ -7,8 +7,7 @@ import {
   User, 
   LogOut, 
   Menu,
-  X,
-  Settings
+  X
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../ui';
@@ -36,7 +35,7 @@ export default function DashboardLayout({ children }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
@@ -45,10 +44,11 @@ export default function DashboardLayout({ children }) {
       )}
 
       {/* Sidebar */}
-      <div className={`
-        fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
+      <div 
+        className={`fixed lg:relative z-50 h-screen w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+          flex flex-col`}
+      >
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
@@ -66,7 +66,7 @@ export default function DashboardLayout({ children }) {
           </button>
         </div>
 
-        <nav className="mt-6 px-3">
+        <nav className="mt-6 px-3 flex-1">
           <div className="space-y-1">
             {navigation.map((item) => {
               const isActive = location.pathname === item.href;
@@ -74,13 +74,11 @@ export default function DashboardLayout({ children }) {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`
-                    group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors
+                  className={`group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors
                     ${isActive
                       ? 'bg-primary-50 text-primary-700 border-r-2 border-primary-600'
                       : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                    }
-                  `}
+                    }`}
                   onClick={() => setSidebarOpen(false)}
                 >
                   <item.icon className="w-5 h-5 mr-3" />
@@ -92,7 +90,7 @@ export default function DashboardLayout({ children }) {
         </nav>
 
         {/* User section */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-gray-200">
           <div className="flex items-center space-x-3 mb-3">
             <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
               <User className="w-4 h-4 text-primary-600" />
@@ -119,8 +117,8 @@ export default function DashboardLayout({ children }) {
       </div>
 
       {/* Main content */}
-      <div className="lg:ml-64">
-        {/* Top bar */}
+      <div className="flex-1 flex flex-col min-h-screen">
+        {/* Top bar for mobile */}
         <div className="bg-white shadow-sm border-b border-gray-200 lg:hidden">
           <div className="flex items-center justify-between h-16 px-4">
             <button
@@ -140,7 +138,7 @@ export default function DashboardLayout({ children }) {
         </div>
 
         {/* Page content */}
-        <main className="p-6">
+        <main className="flex-1 p-6">
           {children}
         </main>
       </div>
