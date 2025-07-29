@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import api from '../../services/api';
 import { 
   Database, 
   Upload, 
@@ -38,48 +39,20 @@ export default function DataSourcePage() {
   });
 
   useEffect(() => {
-    loadDataSources();
+    fetchDataSources();
   }, []);
 
-  const loadDataSources = async () => {
-    setLoading(true);
-    
-    // Simular delay de API
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    // Dados mockados - substitua por chamada real à API
-    setDataSources([
-      {
-        id: 1,
-        name: 'Vendas Q4 2024',
-        type: 'csv',
-        size: '2.5 MB',
-        rows: 15420,
-        created_at: '2024-01-15T10:30:00Z',
-        status: 'active'
-      },
-      {
-        id: 2,
-        name: 'API de Clientes',
-        type: 'api',
-        size: '1.8 MB',
-        rows: 8960,
-        created_at: '2024-01-10T14:20:00Z',
-        status: 'active'
-      },
-      {
-        id: 3,
-        name: 'Produtos Shopify',
-        type: 'api',
-        size: '890 KB',
-        rows: 2340,
-        created_at: '2024-01-08T09:15:00Z',
-        status: 'syncing'
-      }
-    ]);
-    
-    setLoading(false);
-  };
+  const fetchDataSources = async () => {
+   setLoading(true);
+   try {
+     const res = await api.get('/data-sources/');
+     setDataSources(res.data);
+   } catch (err) {
+     setError('Erro ao carregar fontes de dados');
+   } finally {
+     setLoading(false);
+   }
+ };
 
   const handleFormChange = (e) => {
     const { name, value, files } = e.target;
@@ -111,21 +84,24 @@ export default function DataSourcePage() {
     }
 
     try {
-      // Simular upload/criação
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Adicionar nova fonte mockada
-      const newSource = {
-        id: dataSources.length + 1,
-        name: formData.name,
-        type: formData.type,
-        size: formData.type === 'csv' ? `${(formData.file.size / 1024 / 1024).toFixed(1)} MB` : '---',
-        rows: Math.floor(Math.random() * 10000) + 1000,
-        created_at: new Date().toISOString(),
-        status: 'active'
-      };
-      
-      setDataSources(prev => [newSource, ...prev]);
+      // upload/criação
+      let res;
+      if (formData.type === 'csv') {
+        const fd = new FormData();
+        fd.append('name', formData.name);
+        fd.append('source_type', 'CSV');
+        fd.append('file', formData.file);
+        res = await api.post('/data-sources/', fd, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+      } else {
+        res = await api.post('/data-sources/', {
+          name: formData.name,
+          source_type: 'API',
+          connection_details: { url: formData.url }
+        });
+      }
+      setDataSources(prev => [res.data, ...prev]);
       setSuccess('Fonte de dados criada com sucesso!');
       setShowCreateForm(false);
       setFormData({ name: '', type: 'csv', file: null, url: '' });
@@ -141,8 +117,7 @@ export default function DataSourcePage() {
     }
 
     try {
-      // Simular deleção
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await api.delete(`/data-sources/${id}/`);
       setDataSources(prev => prev.filter(ds => ds.id !== id));
       setSuccess('Fonte de dados excluída com sucesso!');
     } catch (err) {
@@ -314,72 +289,51 @@ export default function DataSourcePage() {
         )}
 
         {/* Data Sources List */}
-        {dataSources.length === 0 ? (
-          <EmptyState
-            icon={Database}
-            title="Nenhuma fonte de dados encontrada"
-            description="Comece importando dados de arquivos CSV ou conectando uma API externa."
-            action={
-              <Button onClick={() => setShowCreateForm(true)}>
-                <Plus className="w-4 h-4 mr-2" />
-                Criar Primeira Fonte
-              </Button>
-            }
-          />
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {dataSources.map((source) => {
-              const TypeIcon = getTypeIcon(source.type);
-              
-              return (
-                <Card key={source.id} className="hover:shadow-md transition-shadow">
-                  <CardBody>
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-                          <TypeIcon className="w-5 h-5 text-primary-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-gray-900">
-                            {source.name}
-                          </h3>
-                          <p className="text-sm text-gray-500 capitalize">
-                            {source.type}
-                          </p>
-                        </div>
-                      </div>
-                      {getStatusBadge(source.status)}
-                    </div>
-
-                    <div className="space-y-2 mb-4">
-                      <div className="flex items-center text-sm text-gray-600">
-                        <HardDrive className="w-4 h-4 mr-2" />
-                        {source.size} • {source.rows.toLocaleString()} registros
-                      </div>
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Calendar className="w-4 h-4 mr-2" />
-                        Criado em {formatDate(source.created_at)}
-                      </div>
-                    </div>
-
-                    <div className="flex justify-end space-x-2">
-                      <Button size="sm" variant="outline">
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="danger"
-                        onClick={() => handleDelete(source.id)}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </CardBody>
-                </Card>
-              );
-            })}
-          </div>
-        )}
+            {loading ? (
+      <div className="flex justify-center py-10">
+        <LoadingSpinner />
+      </div>
+    ) : (
+      <table className="w-full table-auto border-collapse">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="p-2 text-left">Nome</th>
+            <th className="p-2 text-left">Tipo</th>
+            <th className="p-2 text-left">Criado em</th>
+            <th className="p-2">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {dataSources.length > 0 ? (
+            dataSources.map(ds => (
+              <tr key={ds.id} className="border-t">
+                <td className="p-2">{ds.name}</td>
+                <td className="p-2">{ds.source_type}</td>
+                <td className="p-2">
+                  {ds.created_at
+                    ? new Date(ds.created_at).toLocaleString()
+                    : '—'}
+                </td>
+                <td className="p-2 text-center space-x-2">
+                  <Button variant="ghost" size="sm" onClick={() => {/* editar */}}>
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => handleDelete(ds.id)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="4" className="p-4 text-center text-gray-500">
+                Nenhuma fonte de dados encontrada
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    )}
       </div>
     </DashboardLayout>
   );

@@ -65,4 +65,19 @@ api.interceptors.response.use(
   }
 );
 
+async function uploadDocumento(file, nome) {
+  const fd = new FormData();
+  fd.append('arquivo', file);
+  fd.append('nome', nome);
+
+  try {
+    const res = await api.post('/documentos/', fd, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    console.log('Upload OK:', res.data);
+  } catch (err) {
+    console.error('Erro no upload:', err.response?.data || err.message);
+  }
+}
+
 export default api;
